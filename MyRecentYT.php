@@ -36,6 +36,8 @@ class MyRecentYT
 	function getOptions()
 	{
 		// TODO support multiple instances with different configs
+		$title = get_option('my-recent-yt_title');
+		if(!$title) $title = '';
 		$username = get_option('my-recent-yt_username');
 		if(!$username) $username = '';
 		$numVideos = get_option('my-recent-yt_num_videos');
@@ -45,25 +47,34 @@ class MyRecentYT
 		$height = get_option('my-recent-yt_height');
 		if(!$height) $height = 240;
 		
-		return compact('username', 'numVideos', 'width', 'height');
+		return compact('username', 'numVideos', 'width', 'height', 'title');
 	}
 	
 	/**
 	 * Render the widget for display (like in a sidebar)
 	 */
-	function renderWidget()
+	function renderWidget($widget_args = array())
 	{	
-		echo '<div class="my-recent-yt-widget">';
+		extract( $widget_args, EXTR_SKIP );
 		extract(self::getOptions());
+				
+		echo $before_widget;
+		if(!empty( $title ))
+		{
+			echo $before_title.$title.$after_title;
+		}
+		
+		echo '<div class="my-recent-yt-widget">';
 		$videoIDs = self::getVideoIDs($username, $numVideos);
 		foreach($videoIDs as $videoID)
 		{
 			echo self::getVideoEmbed($videoID, $width, $height);
 		}
 		echo '</div>';
+		echo $after_widget;
 	}
 	
-	function renderControl($widget_args)
+	function renderControl($widget_args = array())
 	{
 		// TODO support multiple instances with different configs
 		static $updated = false;
@@ -74,6 +85,8 @@ class MyRecentYT
 	
 		if ( !$updated && !empty($_POST['sidebar']))
 		{
+			$title = $_POST['my-recent-yt_title'];
+			self::setOption('my-recent-yt_title', $title);
 			$username = $_POST['my-recent-yt_username'];
 			self::setOption('my-recent-yt_username', $username);
 			$numVideos = $_POST['my-recent-yt_num_videos'];

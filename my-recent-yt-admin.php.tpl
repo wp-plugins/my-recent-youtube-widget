@@ -1,6 +1,12 @@
 <!-- My Recent YT Control -->
+
 <p>
-<label for="my-recent-yt_username">YouTube Username
+<label for="my-recent-yt_title"><span style="display:block;">Title</span>
+<input class="widefat" type="text" id="my-recent-yt_title" name="my-recent-yt_title" value="<?php echo $title; ?>" /></label>
+</p>
+
+<p>
+<label for="my-recent-yt_username"><span style="display:block;">YouTube Username</span>
 <input class="widefat" type="text" id="my-recent-yt_username" name="my-recent-yt_username" value="<?php echo $username; ?>" /></label>
 </p>
 
