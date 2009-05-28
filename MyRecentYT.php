@@ -17,6 +17,8 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
+include_once("DavesFileCache.php");
+
 class MyRecentYT
 {
 	/**
@@ -24,8 +26,20 @@ class MyRecentYT
 	 */
 	function init()
 	{
+		add_action('admin_init', array(__CLASS__, 'admin_init'));
 		register_sidebar_widget('My Recent YouTube', array(__CLASS__, 'renderWidget'));
 		register_widget_control('My Recent YouTube', array(__CLASS__, 'renderControl'), 400, 300);
+	}
+	
+	function admin_init()
+	{
+		if(!DavesFileCache::testCacheDir())
+		{
+			echo <<<WARNING
+				<div class="error"><p>The cache directory for <strong>My Recent YouTube Widget</strong> does not exist or can't be written to.</p><p>Please make sure there is a directory named "cache" in the plugin's directory and it is writable by your web server.</p></div>
+WARNING;
+		}
+		
 	}
 	
 	/**
@@ -129,9 +143,24 @@ class MyRecentYT
 	{
 		$ids = array();
 		
-		$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&max-results=$numVideos";	
-
-		$xml = simplexml_load_file(rawurlencode($feedURL));
+		$cacheIdentifier = "my-recent-yt-$username-$numVideos";
+		
+		try
+		{
+			$cache = DavesFileCache::forIdentifier($cacheIdentifier);
+			$feedXML = $cache->get();
+		}
+		catch(Exception $e)
+		{
+			$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&max-results=$numVideos";
+			$feedXML = file_get_contents($feedURL);
+			
+			$cache = new DavesFileCache($cacheIdentifier);
+			$cache->store($feedXML, 3600);
+		}
+		
+		$xml = simplexml_load_string($feedXML);	
+		
 		if($xml)
 		{
 			foreach($xml->entry as $entry)
