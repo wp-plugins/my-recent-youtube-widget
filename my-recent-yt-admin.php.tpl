@@ -25,4 +25,15 @@
 <input class="fat" type="text" id="my-recent-yt_height" name="my-recent-yt_height" value="<?php echo $height; ?>" size="4" maxlength="4" /></label>
 </p>
 
+<div class="my-recent-yt-expandable">
+<div class="my-recent-yt-extoggle" style="color: blue;text-decoration: underline;cursor: pointer;">Advanced</div>
+<div style="display: none;" class="my-recent-yt-expanel">
+	<p>
+	<label for="my-recent-yt_wrapper_class"><span style="display:block;">Widget wrapper &lt;div&gt; class</span>
+	<input class="widefat" type="text" id="my-recent-yt_wrapper_class" name="my-recent-yt_wrapper_class" value="<?php echo $wrapperClass; ?>" /></label>
+	</p>
+</div>
+</div>
+
+<br />
 <!-- END:My Recent YT Control -->

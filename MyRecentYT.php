@@ -33,12 +33,17 @@ class MyRecentYT
 	
 	function admin_init()
 	{
+		$pluginPath = WP_PLUGIN_URL.'/'.str_replace(basename(__FILE__),"",plugin_basename(__FILE__));
+		
 		if(!DavesFileCache::testCacheDir())
 		{
 			echo <<<WARNING
 				<div class="error"><p>The cache directory for <strong>My Recent YouTube Widget</strong> does not exist or can't be written to.</p><p>Please make sure there is a directory named "cache" in the plugin's directory and it is writable by your web server.</p></div>
 WARNING;
 		}
+		
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('my-recent-yt-admin', $pluginPath.'/my-recent-yt-admin.js', 'jquery');
 		
 	}
 	
@@ -60,8 +65,10 @@ WARNING;
 		if(!$width) $width = 320;
 		$height = get_option('my-recent-yt_height');
 		if(!$height) $height = 240;
+		$wrapperClass = get_option('my-recent-yt_wrapper_class');
+		if(!$wrapperClass) $wrapperClass = '';
 		
-		return compact('username', 'numVideos', 'width', 'height', 'title');
+		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass');
 	}
 	
 	/**
@@ -73,6 +80,7 @@ WARNING;
 		extract(self::getOptions());
 				
 		echo $before_widget;
+		if(!empty($wrapperClass)) echo "<div class=\"$wrapperClass\">";
 		if(!empty( $title ))
 		{
 			echo $before_title.$title.$after_title;
@@ -85,6 +93,7 @@ WARNING;
 			echo self::getVideoEmbed($videoID, $width, $height);
 		}
 		echo '</div>';
+		if(!empty($wrapperClass)) echo "</div>";
 		echo $after_widget;
 	}
 	
@@ -109,6 +118,8 @@ WARNING;
 			self::setOption('my-recent-yt_width', $width);
 			$height = $_POST['my-recent-yt_height'];
 			self::setOption('my-recent-yt_height', $height);
+			$wrapperClass = $_POST['my-recent-yt_wrapper_class'];
+			self::setOption('my-recent-yt_wrapper_class', $wrapperClass);
 		}
 		else
 		{
