@@ -25,6 +25,11 @@
 <input class="fat" type="text" id="my-recent-yt_height" name="my-recent-yt_height" value="<?php echo $height; ?>" size="4" maxlength="4" /></label>
 </p>
 
+<p>
+<label for="my-recent-yt_cache_timeout"><span style="display:block;">Cache timeout</span>
+<input class="fat" type="text" id="my-recent-yt_cache_timeout" name="my-recent-yt_cache_timeout" value="<?php echo $cacheTimeout; ?>" size="4" maxlength="4" /></label>
+</p>
+
 <div class="my-recent-yt-expandable">
 <div class="my-recent-yt-extoggle" style="color: blue;text-decoration: underline;cursor: pointer;">Advanced</div>
 <div style="display: none;" class="my-recent-yt-expanel">

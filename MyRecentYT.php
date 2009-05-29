@@ -67,8 +67,10 @@ WARNING;
 		if(!$height) $height = 240;
 		$wrapperClass = get_option('my-recent-yt_wrapper_class');
 		if(!$wrapperClass) $wrapperClass = '';
+		$cacheTimeout = get_option('my-recent-yt_cache_timeout');
+		if(!$cacheTimeout) $cacheTimeout = 3600;
 		
-		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass');
+		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass', 'cacheTimeout');
 	}
 	
 	/**
@@ -120,6 +122,8 @@ WARNING;
 			self::setOption('my-recent-yt_height', $height);
 			$wrapperClass = $_POST['my-recent-yt_wrapper_class'];
 			self::setOption('my-recent-yt_wrapper_class', $wrapperClass);
+			$cacheTimeout = $_POST['my-recent-yt_cache_timeout'];
+			self::setOption('my-recent-yt_cache_timeout', $cacheTimeout);
 		}
 		else
 		{
@@ -152,6 +156,8 @@ WARNING;
 	 */
 	function getVideoIDs($username, $numVideos = 10)
 	{
+		extract(self::getOptions());
+		
 		$ids = array();
 		
 		$cacheIdentifier = "my-recent-yt-$username-$numVideos";
@@ -167,7 +173,7 @@ WARNING;
 			$feedXML = file_get_contents($feedURL);
 			
 			$cache = new DavesFileCache($cacheIdentifier);
-			$cache->store($feedXML, 3600);
+			$cache->store($feedXML, $cacheTimeout);
 		}
 		
 		$xml = simplexml_load_string($feedXML);	
