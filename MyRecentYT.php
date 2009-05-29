@@ -67,10 +67,12 @@ WARNING;
 		if(!$height) $height = 240;
 		$wrapperClass = get_option('my-recent-yt_wrapper_class');
 		if(!$wrapperClass) $wrapperClass = '';
+		$wrapperID = get_option('my-recent-yt_wrapper_id');
+		if(!$wrapperID) $wrapperID = '';
 		$cacheTimeout = get_option('my-recent-yt_cache_timeout');
 		if(!$cacheTimeout) $cacheTimeout = 3600;
 		
-		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass', 'cacheTimeout');
+		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass', 'cacheTimeout', 'wrapperID');
 	}
 	
 	/**
@@ -82,7 +84,7 @@ WARNING;
 		extract(self::getOptions());
 				
 		echo $before_widget;
-		if(!empty($wrapperClass)) echo "<div class=\"$wrapperClass\">";
+		if(!empty($wrapperClass) || !empty($wrapperID)) echo "<div id=\"$wrapperID\" class=\"$wrapperClass\">";
 		if(!empty( $title ))
 		{
 			echo $before_title.$title.$after_title;
@@ -95,7 +97,7 @@ WARNING;
 			echo self::getVideoEmbed($videoID, $width, $height);
 		}
 		echo '</div>';
-		if(!empty($wrapperClass)) echo "</div>";
+		if(!empty($wrapperClass) || !empty($wrapperID)) echo "</div>";
 		echo $after_widget;
 	}
 	
@@ -122,6 +124,8 @@ WARNING;
 			self::setOption('my-recent-yt_height', $height);
 			$wrapperClass = $_POST['my-recent-yt_wrapper_class'];
 			self::setOption('my-recent-yt_wrapper_class', $wrapperClass);
+			$wrapperID = $_POST['my-recent-yt_wrapper_id'];
+			self::setOption('my-recent-yt_wrapper_id', $wrapperID);
 			$cacheTimeout = $_POST['my-recent-yt_cache_timeout'];
 			self::setOption('my-recent-yt_cache_timeout', $cacheTimeout);
 		}

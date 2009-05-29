@@ -37,6 +37,11 @@
 	<label for="my-recent-yt_wrapper_class"><span style="display:block;">Widget wrapper &lt;div&gt; class</span>
 	<input class="widefat" type="text" id="my-recent-yt_wrapper_class" name="my-recent-yt_wrapper_class" value="<?php echo $wrapperClass; ?>" /></label>
 	</p>
+	
+	<p>
+	<label for="my-recent-yt_wrapper_id"><span style="display:block;">Widget wrapper &lt;div&gt; ID</span>
+	<input class="widefat" type="text" id="my-recent-yt_wrapper_id" name="my-recent-yt_wrapper_id" value="<?php echo $wrapperID; ?>" /></label>
+	</p>
 </div>
 </div>
 
