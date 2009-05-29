@@ -26,7 +26,7 @@
 </p>
 
 <p>
-<label for="my-recent-yt_cache_timeout"><span style="display:block;">Cache timeout</span>
+<label for="my-recent-yt_cache_timeout"><span style="display:block;">Cache timeout (seconds)</span>
 <input class="fat" type="text" id="my-recent-yt_cache_timeout" name="my-recent-yt_cache_timeout" value="<?php echo $cacheTimeout; ?>" size="4" maxlength="4" /></label>
 </p>
 
