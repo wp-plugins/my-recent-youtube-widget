@@ -1,49 +1,52 @@
 <!-- My Recent YT Control -->
 
 <p>
-<label for="my-recent-yt_title"><span style="display:block;">Title</span>
-<input class="widefat" type="text" id="my-recent-yt_title" name="my-recent-yt_title" value="<?php echo $title; ?>" /></label>
+<label for="my-recent-yt_title-<?php echo $number; ?>"><span style="display:block;">Title</span>
+<input class="widefat" type="text" id="my-recent-yt_title-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][title]" value="<?php echo $title; ?>" /></label>
 </p>
 
 <p>
-<label for="my-recent-yt_username"><span style="display:block;">YouTube Username</span>
-<input class="widefat" type="text" id="my-recent-yt_username" name="my-recent-yt_username" value="<?php echo $username; ?>" /></label>
+<label for="my-recent-yt_username-<?php echo $number; ?>"><span style="display:block;">YouTube Username</span>
+<input class="widefat" type="text" id="my-recent-yt_username-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][username]" value="<?php echo $username; ?>" /></label>
 </p>
 
 <p>
-<label for="my-recent-yt_num_videos"><span style="display:block;">Number of videos</span>
-<input class="fat" type="text" id="my-recent-yt_num_videos" name="my-recent-yt_num_videos" value="<?php echo $numVideos; ?>" size="3" maxlength="3" /></label>
+<label for="my-recent-yt_num_videos-<?php echo $number; ?>"><span style="display:block;">Number of videos</span>
+<input class="fat" type="text" id="my-recent-yt_num_videos-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][numVideos]" value="<?php echo $numVideos; ?>" size="3" maxlength="3" /></label>
 </p>
 
 <p>
-<label for="my-recent-yt_width"><span style="display:block;">Width</span>
-<input class="fat" type="text" id="my-recent-yt_width" name="my-recent-yt_width" value="<?php echo $width; ?>" size="4" maxlength="4" /></label>
+<label for="my-recent-yt_width-<?php echo $number; ?>"><span style="display:block;">Width</span>
+<input class="fat" type="text" id="my-recent-yt_width-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][width]" value="<?php echo $width; ?>" size="4" maxlength="4" /></label>
 </p>
 
 <p>
-<label for="my-recent-yt_height"><span style="display:block;">Height</span>
-<input class="fat" type="text" id="my-recent-yt_height" name="my-recent-yt_height" value="<?php echo $height; ?>" size="4" maxlength="4" /></label>
+<label for="my-recent-yt_height-<?php echo $number; ?>"><span style="display:block;">Height</span>
+<input class="fat" type="text" id="my-recent-yt_height-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][height]" value="<?php echo $height; ?>" size="4" maxlength="4" /></label>
 </p>
 
 <p>
-<label for="my-recent-yt_cache_timeout"><span style="display:block;">Cache timeout (seconds)</span>
-<input class="fat" type="text" id="my-recent-yt_cache_timeout" name="my-recent-yt_cache_timeout" value="<?php echo $cacheTimeout; ?>" size="4" maxlength="4" /></label>
+<label for="my-recent-yt_cache_timeout-<?php echo $number; ?>"><span style="display:block;">Cache timeout (seconds)</span>
+<input class="fat" type="text" id="my-recent-yt_cache_timeout-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][cacheTimeout]" value="<?php echo $cacheTimeout; ?>" size="4" maxlength="4" /></label>
 </p>
 
 <div class="my-recent-yt-expandable">
 <div class="my-recent-yt-extoggle" style="color: blue;text-decoration: underline;cursor: pointer;">Advanced</div>
 <div style="display: none;" class="my-recent-yt-expanel">
 	<p>
-	<label for="my-recent-yt_wrapper_class"><span style="display:block;">Widget wrapper &lt;div&gt; class</span>
-	<input class="widefat" type="text" id="my-recent-yt_wrapper_class" name="my-recent-yt_wrapper_class" value="<?php echo $wrapperClass; ?>" /></label>
+	<label for="my-recent-yt_wrapper_class-<?php echo $number; ?>"><span style="display:block;">Widget wrapper &lt;div&gt; class</span>
+	<input class="widefat" type="text" id="my-recent-yt_wrapper_class-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][wrapperClass]" value="<?php echo $wrapperClass; ?>" /></label>
 	</p>
 	
 	<p>
-	<label for="my-recent-yt_wrapper_id"><span style="display:block;">Widget wrapper &lt;div&gt; ID</span>
-	<input class="widefat" type="text" id="my-recent-yt_wrapper_id" name="my-recent-yt_wrapper_id" value="<?php echo $wrapperID; ?>" /></label>
+	<label for="my-recent-yt_wrapper_id-<?php echo $number; ?>"><span style="display:block;">Widget wrapper &lt;div&gt; ID</span>
+	<input class="widefat" type="text" id="my-recent-yt_wrapper_id-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][wrapperID]" value="<?php echo $wrapperID; ?>" /></label>
 	</p>
 </div>
+
 </div>
+
+<input type="hidden" name="widget-my-recent-yt[<?php echo $number; ?>][submit]" value="1" />
 
 <br />
 <!-- END:My Recent YT Control -->
