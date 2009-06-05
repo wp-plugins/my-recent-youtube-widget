@@ -263,7 +263,7 @@ WARNING;
 		}
 		catch(Exception $e)
 		{
-			$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&max-results=$numVideos";
+			$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&orderby=published&max-results=$numVideos";
 			$feedXML = file_get_contents($feedURL);
 			
 			$cache = new DavesFileCache($cacheIdentifier);
