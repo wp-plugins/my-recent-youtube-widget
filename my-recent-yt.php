@@ -24,8 +24,30 @@ Author URI: http://davidmichaelross.com
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
+ 
+ if(5.0 > floatval(phpversion())) {
+	// Call the special error handler that displays an error
+	add_action('admin_notices', 'my_recent_youtube_phpver_admin_notice');
+}
+else {
+	// Pre-2.6 compatibility
+	// See http://codex.wordpress.org/Determining_Plugin_and_Content_Directories
+	if ( ! defined( 'WP_CONTENT_URL' ) )
+	      define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
+	if ( ! defined( 'WP_CONTENT_DIR' ) )
+	      define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+	if ( ! defined( 'WP_PLUGIN_URL' ) )
+	      define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '/plugins' );
+	if ( ! defined( 'WP_PLUGIN_DIR' ) )
+	      define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+	      
+	include_once("MyRecentYT.php");
+	add_action('plugins_loaded', array('MyRecentYT', 'init'));
+}
 
-include_once("MyRecentYT.php");
-add_action('plugins_loaded', array('MyRecentYT', 'init'));
-
+function my_recent_youtube_phpver_admin_notice() {
+	$alertMessage = __("My Recent YouTube Widget requires PHP 5.0 or higher");
+	echo "<div class=\"updated\"><p><strong>$alertMessage</strong></p></div>";
+	
+}
 ?>
