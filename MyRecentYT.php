@@ -17,8 +17,6 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
-include_once("DavesFileCache.php");
-
 class MyRecentYT
 {
 	/**
@@ -60,17 +58,9 @@ class MyRecentYT
 	function admin_init()
 	{
 		$pluginPath = WP_PLUGIN_URL.'/'.str_replace(basename(__FILE__),"",plugin_basename(__FILE__));
-		
-		if(!DavesFileCache::testCacheDir($this->getCacheDir()))
-		{
-			echo <<<WARNING
-				<div class="error"><p>The cache directory for <strong>My Recent YouTube Widget</strong> does not exist or can't be written to.</p><p>Please make sure there is a directory named "cache" in the plugin's directory and it is writable by your web server.</p></div>
-WARNING;
-		}
-		
+	
 		wp_enqueue_script('jquery');
-		wp_enqueue_script('my-recent-yt-admin', $pluginPath.'/my-recent-yt-admin.js', 'jquery');
-		
+		wp_enqueue_script('my-recent-yt-admin', $pluginPath.'/my-recent-yt-admin.js', 'jquery');		
 	}
 	
 	/**
@@ -255,18 +245,11 @@ WARNING;
 		
 		$cacheIdentifier = "my-recent-yt-$username-$numVideos";
 		
-		try
-		{
-			$cache = DavesFileCache::forIdentifier($cacheIdentifier, MyRecentYT::getCacheDir());
-			$feedXML = $cache->get();
-		}
-		catch(Exception $e)
-		{
+		$feedXML = get_transient($cacheIdentifier);
+		if(!$feedXML) {
 			$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&orderby=published&max-results=$numVideos";
 			$feedXML = file_get_contents($feedURL);
-			
-			$cache = new DavesFileCache($cacheIdentifier, MyRecentYT::getCacheDir());
-			$cache->store($feedXML, $cacheTimeout);
+			set_transient($cacheIdentifier, $feedXML, $cacheTimeout);
 		}
 		
 		$xml = simplexml_load_string($feedXML);	
