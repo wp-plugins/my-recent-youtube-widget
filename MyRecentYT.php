@@ -180,8 +180,8 @@ WARNING;
 
 				if ( !isset($widget_settings['username']) && isset($options[$widget_number]) ) // user clicked cancel
 					continue;
-				$title = strip_tags(stripslashes($widget_settings['title']));
-				$username = strip_tags(stripslashes($widget_settings['username']));
+				$title = strip_tags(stripslashes(trim($widget_settings['title'])));
+				$username = strip_tags(stripslashes(trim($widget_settings['username'])));
 				$numVideos = strip_tags(stripslashes($widget_settings['numVideos']));
 				$height = strip_tags(stripslashes($widget_settings['height']));
 				$width = strip_tags(stripslashes($widget_settings['width']));
