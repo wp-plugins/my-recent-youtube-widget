@@ -182,10 +182,10 @@ WARNING;
 					continue;
 				$title = strip_tags(stripslashes(trim($widget_settings['title'])));
 				$username = strip_tags(stripslashes(trim($widget_settings['username'])));
-				$numVideos = strip_tags(stripslashes($widget_settings['numVideos']));
-				$height = strip_tags(stripslashes($widget_settings['height']));
-				$width = strip_tags(stripslashes($widget_settings['width']));
-				$cacheTimeout = strip_tags(stripslashes($widget_settings['cacheTimeout']));
+				$numVideos = intval($widget_settings['numVideos']);
+				$height = intval($widget_settings['height']);
+				$width = intval($widget_settings['width']);
+				$cacheTimeout = intval($widget_settings['cacheTimeout']);
 				$wrapperClass = strip_tags(stripslashes($widget_settings['wrapperClass']));
 				$wrapperID = strip_tags(stripslashes($widget_settings['wrapperID']));
 				
