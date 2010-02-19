@@ -24,10 +24,16 @@ Author URI: http://davidmichaelross.com
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
- 
- if(5.0 > floatval(phpversion())) {
+
+$wpVerParts = explode('.', $wp_version);
+$wpVerMajorMinor = floatval($wpVerParts[0].'.'.$wpVerParts[1]);
+
+if(5.0 > floatval(phpversion())) {
 	// Call the special error handler that displays an error
 	add_action('admin_notices', 'my_recent_youtube_phpver_admin_notice');
+}
+elseif($wpVerMajorMinor < 2.9) {
+	add_action('admin_notices', 'my_recent_youtube_wpver_admin_notice');
 }
 else {
 	// Pre-2.6 compatibility
@@ -48,6 +54,10 @@ else {
 function my_recent_youtube_phpver_admin_notice() {
 	$alertMessage = __("My Recent YouTube Widget requires PHP 5.0 or higher");
 	echo "<div class=\"updated\"><p><strong>$alertMessage</strong></p></div>";
-	
+}
+
+function my_recent_youtube_wpver_admin_notice() {
+	$alertMessage = __("My Recent YouTube Widget requires WordPress 2.9 or higher");
+	echo "<div class=\"updated\"><p><strong>$alertMessage</strong></p></div>";
 }
 ?>
