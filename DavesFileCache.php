@@ -21,20 +21,25 @@ if(!class_exists('DavesFileCache')) {
 	
 /**
  * Cheap implementation of a file cache, stolen from an old theme I wrote
- *
+ * @version 1.1
  */
 class DavesFileCache
 {
 	var $CACHE_DIR = "cache";
 
 	var $identifier = null;
+	var $cacheDir = null;
 
 	var $expiration = null;
 	var $contents = null;
 
-	function __construct($identifier)
+	function __construct($identifier, $cacheDir = NULL)
 	{
 		$this->identifier = $identifier;
+		if(NULL == $cacheDir) {
+			$cacheDir = dirname(__FILE__).'/'.$this->CACHE_DIR;
+		}
+		$this->cacheDir = $cacheDir;
 	}
 
 	/**
@@ -44,11 +49,11 @@ class DavesFileCache
 	 * @return unknown
 	 * @static 
 	 */
-	function forIdentifier($identifier)
+	function forIdentifier($identifier, $cacheDir = NULL)
 	{
-		$cache = new DavesFileCache($identifier);
+		$cache = new DavesFileCache($identifier, $cacheDir);
 		$cacheFile = $cache->getFilePath();
-
+		
 		if(file_exists($cacheFile))
 		{
 			$cachedObj = unserialize(file_get_contents($cacheFile));
@@ -102,7 +107,7 @@ class DavesFileCache
 	
 	function getFileDir()
 	{
-		return dirname(__FILE__).'/'.$this->CACHE_DIR;
+		return $this->cacheDir;
 	}
 	
 	/**

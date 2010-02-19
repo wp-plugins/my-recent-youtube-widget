@@ -61,7 +61,7 @@ class MyRecentYT
 	{
 		$pluginPath = WP_PLUGIN_URL.'/'.str_replace(basename(__FILE__),"",plugin_basename(__FILE__));
 		
-		if(!DavesFileCache::testCacheDir())
+		if(!DavesFileCache::testCacheDir($this->getCacheDir()))
 		{
 			echo <<<WARNING
 				<div class="error"><p>The cache directory for <strong>My Recent YouTube Widget</strong> does not exist or can't be written to.</p><p>Please make sure there is a directory named "cache" in the plugin's directory and it is writable by your web server.</p></div>
@@ -257,16 +257,15 @@ WARNING;
 		
 		try
 		{
-			$cache = DavesFileCache::forIdentifier($cacheIdentifier);
+			$cache = DavesFileCache::forIdentifier($cacheIdentifier, MyRecentYT::getCacheDir());
 			$feedXML = $cache->get();
-			throw new Exception("qqq");
 		}
 		catch(Exception $e)
 		{
 			$feedURL = "http://gdata.youtube.com/feeds/api/users/$username/uploads?v=2&orderby=published&max-results=$numVideos";
 			$feedXML = file_get_contents($feedURL);
 			
-			$cache = new DavesFileCache($cacheIdentifier);
+			$cache = new DavesFileCache($cacheIdentifier, MyRecentYT::getCacheDir());
 			$cache->store($feedXML, $cacheTimeout);
 		}
 		
@@ -309,6 +308,13 @@ WARNING;
 			</div>
 EMBED;
 		return $embed;
+	}
+	
+	/**
+	 * @return string
+	 */ 
+	function getCacheDir() {
+		return dirname(__FILE__)."/cache";
 	}
 }
 
