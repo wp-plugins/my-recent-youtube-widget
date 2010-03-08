@@ -4,7 +4,7 @@
 Plugin Name: My Recent YouTube Widget
 Description: Embed the most recent YouTube videos for a user in a sidebar
 Author: Dave Ross
-Version: 0.2
+Version: 0.3
 Author URI: http://davidmichaelross.com
 */
 
