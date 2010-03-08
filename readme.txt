@@ -4,7 +4,7 @@ Donate link: http://catguardians.org/
 Tags: youtube, video, embed
 Requires at least: 2.9
 Tested up to: 2.9.2
-Stable tag: 0.2
+Stable tag: 0.3
 
 Embed the most recent YouTube videos for a user in a sidebar
 
@@ -39,6 +39,9 @@ the directory of the stable readme.txt, so in this case, `/tags/4.3/screenshot-1
 
 == Changelog ==
 
+= 0.3 =
+* Fixed opening the "advanced" settings panel in Safari
+
 = 0.2 =
 * Replaced DavesFileCache with WordPress Transient API
 * Better filtering on settings
@@ -47,6 +50,9 @@ the directory of the stable readme.txt, so in this case, `/tags/4.3/screenshot-1
 * Early pre-relase version. Didn't cache.
 
 == Upgrade Notice ==
+
+= 0.3 =
+Fixed the "advanced" panel in the widget editor when using the Safari browser
 
 = 0.2 =
 Caching keeps your blog from bogging down YouTube's servers and makes them less likely to block you
