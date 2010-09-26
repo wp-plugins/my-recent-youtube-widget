@@ -64,34 +64,6 @@ class MyRecentYT
 	}
 	
 	/**
-	 * Retrieve's this plugin's options & sets defaults where needed
-	 *
-	 * @return Array variables, process with extract()
-	 */
-	function getOptions()
-	{
-		// TODO support multiple instances with different configs
-		$title = get_option('my-recent-yt_title');
-		if(!$title) $title = '';
-		$username = get_option('my-recent-yt_username');
-		if(!$username) $username = '';
-		$numVideos = get_option('my-recent-yt_num_videos');
-		if(!$numVideos) $numVideos = 1;
-		$width = get_option('my-recent-yt_width');
-		if(!$width) $width = 320;
-		$height = get_option('my-recent-yt_height');
-		if(!$height) $height = 240;
-		$wrapperClass = get_option('my-recent-yt_wrapper_class');
-		if(!$wrapperClass) $wrapperClass = '';
-		$wrapperID = get_option('my-recent-yt_wrapper_id');
-		if(!$wrapperID) $wrapperID = '';
-		$cacheTimeout = get_option('my-recent-yt_cache_timeout');
-		if(!$cacheTimeout) $cacheTimeout = 3600;
-		
-		return compact('username', 'numVideos', 'width', 'height', 'title', 'wrapperClass', 'cacheTimeout', 'wrapperID');
-	}
-	
-	/**
 	 * Render the widget for display (like in a sidebar)
 	 */
 	function renderWidget($args, $widget_args = 1)
@@ -109,6 +81,7 @@ class MyRecentYT
 		$title = apply_filters('widget_title', $options[$number]['title']);
 		$username = apply_filters( 'widget_text', $options[$number]['username'] );
 		$numVideos = apply_filters('widget_text', $options[$number]['numVideos']);
+                $showTitles = ($options[$number]['showTitles'] == TRUE);
 		$width = apply_filters('widget_text', $options[$number]['width']);
 		$height = apply_filters('widget_text', $options[$number]['height']);
 		$cacheTimeout = apply_filters('widget_text', $options[$number]['cacheTimeout']);
@@ -120,10 +93,11 @@ class MyRecentYT
 				<?php if ( !empty( $title ) ) { echo $before_title . $title . $after_title; } ?>
 				<?php 
 				echo '<div class="my-recent-yt-widget">';
-				$videoIDs = self::getVideoIDs($options[$number]);
-				foreach($videoIDs as $videoID)
+				$videoInfo = self::getVideoInfo($options[$number]);
+				foreach($videoInfo as $videoID=>$videoTitle)
 				{
-					echo self::getVideoEmbed($videoID, $width, $height);
+                                    $embedTitle = ($showTitles) ? $videoTitle : '';
+                                    echo self::getVideoEmbed($videoID, $width, $height, $embedTitle);
 				}
 				echo '</div>';
 			if(!empty($wrapperClass) || !empty($wrapperID)) echo "</div>";
@@ -167,18 +141,17 @@ class MyRecentYT
 			}
 	
 			foreach ( (array) $_POST['widget-my-recent-yt'] as $widget_number => $widget_settings ) {
-
 				if ( !isset($widget_settings['username']) && isset($options[$widget_number]) ) // user clicked cancel
 					continue;
 				$title = strip_tags(stripslashes(trim($widget_settings['title'])));
 				$username = strip_tags(stripslashes(trim($widget_settings['username'])));
 				$numVideos = intval($widget_settings['numVideos']);
+				$showTitles = ($widget_settings['showTitles'] == TRUE);
 				$height = intval($widget_settings['height']);
 				$width = intval($widget_settings['width']);
 				$cacheTimeout = intval($widget_settings['cacheTimeout']);
 				$wrapperClass = strip_tags(stripslashes($widget_settings['wrapperClass']));
 				$wrapperID = strip_tags(stripslashes($widget_settings['wrapperID']));
-				
 				
 				/**
 				if ( current_user_can('unfiltered_html') )
@@ -187,7 +160,7 @@ class MyRecentYT
 					$text = stripslashes(wp_filter_post_kses( $widget_settings['text'] ));
 				**/
 				
-				$options[$widget_number] = compact( 'title', 'username', 'numVideos', 'height', 'width', 'cacheTimeout', 'wrapperID', 'wrapperClass' );
+				$options[$widget_number] = compact( 'title', 'username', 'numVideos', 'showTitles', 'height', 'width', 'cacheTimeout', 'wrapperID', 'wrapperClass' );
 			}
 			
 			update_option('widget_my-recent-yt', $options);
@@ -198,6 +171,7 @@ class MyRecentYT
 			$title = '';
 			$number = '%i%';
 			$numVideos = 2;
+                        $showTitles = FALSE;
 			$cacheTimeout = 3600;
 			$height = 242;
 			$width = 290;
@@ -207,6 +181,7 @@ class MyRecentYT
 			$title = attribute_escape($options[$number]['title']);
 			$username = format_to_edit($options[$number]['username']);
 			$numVideos = format_to_edit($options[$number]['numVideos']);
+                        $showTitles = ($options[$number]['showTitles'] == TRUE);
 			$height = format_to_edit($options[$number]['height']);
 			$width = format_to_edit($options[$number]['width']);
 			$cacheTimeout = format_to_edit($options[$number]['cacheTimeout']);
@@ -237,11 +212,11 @@ class MyRecentYT
 	 * @param array $options
 	 * @return Array
 	 */
-	function getVideoIDs($options)
+	function getVideoInfo($options)
 	{
 		extract($options);
 		
-		$ids = array();
+		$info = array();
 		
 		$cacheIdentifier = "my-recent-yt-$username-$numVideos";
 		
@@ -263,11 +238,11 @@ class MyRecentYT
 				$matches = array();
 				
 				preg_match("/video:([^,\\ ]*)/", $id, $matches);
-				$ids[] = $matches[1];
+				$info[$matches[1]] = $entry->title;
 			}
 		}
 
-		return $ids;
+		return $info;
 	}
 	
 	/**
@@ -276,10 +251,12 @@ class MyRecentYT
 	 * @param string $videoID
 	 * @param integer $width
 	 * @param integer $height
+	 * @param string $title
 	 * @return string
 	 */
-	function getVideoEmbed($videoID, $width, $height)
+	function getVideoEmbed($videoID, $width, $height, $title)
 	{
+                $titleEmbed = '<div class="my-recent-yt-title">'.$title.'</div>';
 		$embed = <<<EMBED
 			<div class="my-recent-yt-video">
 				<object width="$width" height="$height">
@@ -288,6 +265,7 @@ class MyRecentYT
 					<param name="allowscriptaccess" value="always"></param>
 					<embed src="http://www.youtube.com/v/{$videoID}?hd=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="$width" height="$height"></embed>
 				</object>
+				$titleEmbed
 			</div>
 EMBED;
 		return $embed;

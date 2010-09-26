@@ -16,6 +16,12 @@
 </p>
 
 <p>
+<label for="my-recent-yt_show_titles-<?php echo $number; ?>"><span style="display:block;">Show titles under videos</span>
+<input type="hidden" name="widget-my-recent-yt[<?php echo $number; ?>][showTitles]" value="0" />
+<input class="fat" type="checkbox" id="my-recent-yt_show_titles-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][showTitles]" value="1" <?php if($showTitles) : ?>checked="checked" <?php endif; ?>/></label>
+</p>
+
+<p>
 <label for="my-recent-yt_width-<?php echo $number; ?>"><span style="display:block;">Width</span>
 <input class="fat" type="text" id="my-recent-yt_width-<?php echo $number; ?>" name="widget-my-recent-yt[<?php echo $number; ?>][width]" value="<?php echo $width; ?>" size="4" maxlength="4" /></label>
 </p>
